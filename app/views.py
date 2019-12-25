@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -8,13 +9,19 @@ from django_filters.views import FilterView
 
 from .filters import ItemFilterSet
 from .forms import ItemForm
+from .forms import F_ItemForm
+
 from .models import Item
+from .models import F_Item
+
 
 
 # 未ログインのユーザーにアクセスを許可する場合は、LoginRequiredMixinを継承から外してください。
 #
 # LoginRequiredMixin：未ログインのユーザーをログイン画面に誘導するMixin
 # 参考：https://docs.djangoproject.com/ja/2.1/topics/auth/default/#the-loginrequired-mixin
+
+
 
 class ItemFilterView(LoginRequiredMixin, FilterView):
     """
@@ -103,6 +110,28 @@ class ItemCreateView(LoginRequiredMixin, CreateView):
         item.save()
 
         return HttpResponseRedirect(self.success_url)
+
+class F_ItemCreateView(LoginRequiredMixin, CreateView):
+    """
+    ビュー：登録画面
+    """
+    model = F_Item
+    form_class = F_ItemForm
+    success_url = reverse_lazy('index')
+
+    def form_valid(self, form):
+        """
+        登録処理
+        """
+        item = form.save(commit=False)
+        item.created_by = self.request.user
+        item.created_at = timezone.now()
+        item.updated_by = self.request.user
+        item.updated_at = timezone.now()
+        item.save()
+
+        return HttpResponseRedirect(self.success_url)
+
 
 
 class ItemUpdateView(LoginRequiredMixin, UpdateView):
