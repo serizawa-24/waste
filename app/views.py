@@ -23,6 +23,15 @@ from .models import F_Item
 
 
 
+def C_View(request):
+    data = Item.objects.all()
+    params = { 
+         'title': 'costomer_data',
+         'data':data,
+    }
+    return render(request,'item_view_Consumer.html',params)
+    
+
 class ItemFilterView(LoginRequiredMixin, FilterView):
     """
     ビュー：一覧表示画面
