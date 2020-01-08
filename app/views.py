@@ -29,8 +29,16 @@ def C_View(request):
          'title': 'costomer_data',
          'data':data,
     }
-    return render(request,'item_view_Consumer.html',params)
-    
+    return render(request,'app/item_C_View.html',params)
+
+def F_View(request):
+    data = F_Item.objects.all()
+    params = { 
+         'title': 'costomer_data',
+         'data':data,
+    }
+    return render(request,'app/item_F_View.html',params)
+
 
 class ItemFilterView(LoginRequiredMixin, FilterView):
     """
