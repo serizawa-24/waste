@@ -10,7 +10,7 @@ class ItemForm(forms.ModelForm):
     ・公式 モデルからフォームを作成する
     https://docs.djangoproject.com/ja/2.1/topics/forms/modelforms/
     """
-    field_order=["F_name","I_name","vegetable","quontity","deadline","memo"]
+    field_order=["F_name","I_name","vegetable","quontity","deadline","address","memo"]
     class Meta:
         model = Item
         fields = '__all__'

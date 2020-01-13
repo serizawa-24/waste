@@ -1,11 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.shortcuts import render,get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django_filters.views import FilterView
+
+from django.core.mail import BadHeaderError, send_mail
 
 from .filters import ItemFilterSet
 from .forms import ItemForm
@@ -23,7 +25,29 @@ from .models import F_Item
 
 
 
+
+
+def sendmail(request):
+    """題名"""
+    subject = "題名"
+    """本文"""
+    message = "本文\nあなたの出品した商品が欲しいという声があります"
+    """送信元メールアドレス"""
+    from_email = "app@sample.com"
+    """宛先メールアドレス"""
+    recipient_list = [
+        #Item.address
+        "kosen@vegetable.jp",
+    ]
+
+    send_mail(subject, message, from_email, recipient_list)
+    success_url = reverse_lazy('index')
+    return HttpResponseRedirect(success_url)
+
 def C_View(request):
+    '''
+    需要側データベースを取得する
+    '''
     data = Item.objects.all()
     params = { 
          'title': 'costomer_data',
@@ -32,9 +56,13 @@ def C_View(request):
     return render(request,'app/item_C_View.html',params)
 
 def F_View(request):
+    '''
+    供給側データベースを取得する
+    '''
+
     data = F_Item.objects.all()
     params = { 
-         'title': 'costomer_data',
+         'title': 'farmer_data',
          'data':data,
     }
     return render(request,'app/item_F_View.html',params)

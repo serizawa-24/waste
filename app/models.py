@@ -38,7 +38,7 @@ class Item(models.Model):
 
     # サンプル項目3 整数
     quontity = models.IntegerField(
-        verbose_name='何kgほしいか',
+        verbose_name='何kg出せるか',
         blank=True,
         null=True,
     )
@@ -69,6 +69,20 @@ class Item(models.Model):
         blank=True,
         null=True,
     )
+
+    address = models.CharField(
+        verbose_name='メールアドレス',
+        max_length=20,
+        blank=True,
+        null=True,
+    )
+
+    good = models.IntegerField(
+        verbose_name = 'いいね',
+        null = True,
+
+    )
+
         # 作成者(ユーザー)
     created_by = models.ForeignKey(
         User,
@@ -87,6 +101,8 @@ class Item(models.Model):
         null=True,
         editable=False,
     )
+
+
 
     # 更新者(ユーザー)
     updated_by = models.ForeignKey(
