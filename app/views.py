@@ -24,17 +24,17 @@ from .models import F_Item
 
 
 def C_View(request):
-    data = Item.objects.all()
+    data = Item.objects.filter(deadline__gt=timezone.now())
     params = { 
-         'title': 'costomer_data',
+         'title': 'customer_data',
          'data':data,
     }
     return render(request,'app/item_C_View.html',params)
 
 def F_View(request):
-    data = F_Item.objects.all()
+    data = F_Item.objects.filter(deadline__gt=timezone.now())
     params = { 
-         'title': 'costomer_data',
+         'title': 'customer_data',
          'data':data,
     }
     return render(request,'app/item_F_View.html',params)
@@ -81,8 +81,8 @@ class ItemFilterView(LoginRequiredMixin, FilterView):
         ソート順・デフォルトの絞り込みを指定
         """
         # デフォルトの並び順として、登録時間（降順）をセットする。
-        return Item.objects.all().order_by('-created_at')
-
+        return Item.objects.filter(deadline__gt=timezone.now()).order_by('-created_at')
+        
     def get_context_data(self, *, object_list=None, **kwargs):
         """
         表示データの設定
